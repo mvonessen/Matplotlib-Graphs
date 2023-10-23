@@ -1,0 +1,99 @@
+%matplotlib inline
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.lines as mlines
+### ASSIGNING VALUES ####
+## 1 - Forest extent (AD) ### Keeping the abbreviation "AD" (from Avoided deforestation)
+AD_avg, AD_std, AD_UA = (2933.02, 3180.347, 2554.42, 3218.148, 2249.823, 3527.993), (320.638, 381.033, 398.611, 437.0859, 320.388, 409.953), (1509.23)
+ind = np.arange(len(AD_avg))
+### ASSIGNING VALUES ####
+## 2 - AREA UNDER PROTECTION (PA) ###
+PA_avg, PA_std, PA_UA = (1114.56, 1808.123, 1402.925, 1485.373, 893.015, 2118.81), (409.654, 472.305, 443.979, 490.983, 252.414, 433.313), (1458.7425)
+ind = np.arange(len(PA_avg)) 
+### ASSIGNING VALUES ####
+## 3 - LAND GRABBING (LG) ###
+LG_avg, LG_std, LG_UA = (834.153, 595.277, 895.9, 651.66, 861.98, 678.235), (140.985, 160.358, 197.238, 155.773, 187.793, 244.249), (822.868)
+ind = np.arange(len(LG_avg))
+### ASSIGNING VALUES ####
+## 4 - EXPROPRIATIONS (EX) ###
+EX_avg, EX_std, EX_UA = (781.047, 733.913, 570.415, 543.623, 382.563, 656.128), (211.379, 234.3, 264.213, 255.438, 133.218, 299.916), (544.938)
+ind = np.arange(len(EX_avg))  
+### ASSIGNING VALUES ####
+## 5 - LOBBYING & CAMPAIGNING ###
+LC_avg, LC_std, LC_UA = (152.933, 177.475, 159.908, 128.191, 93.336, 329.560), (60.337, 59.64, 77.848, 105.634, 44.102, 104.237), (147.349)
+ind = np.arange(len(LC_avg)) 
+### ASSIGNING VALUES ####
+## 6 - FINING & SHAMING ###
+FS_avg, FS_std, FS_UA = (219.197, 212.307, 303.88, 165.05, 225.723, 241.423), (69.544, 73.453, 82.413, 65.406, 37.338, 102.988), (220.247)
+ind = np.arange(len(FS_avg)) 
+#Column titles using suptitle spacing
+#Creating the plot
+fig, ax = plt.subplots(2, 3, figsize=(12, 6), sharey=True, constrained_layout=False, tight_layout=False)
+fig.suptitle('Performance indicators by condition', fontweight='bold', fontsize=17, x=0.15, y=0.99, ha='left', va='top')
+
+
+rects1 = ax[0,0].barh(np.arange(len(AD_avg)), AD_avg, xerr=AD_std, capsize=3,
+                label='Forest extent', color='silver', height = 0.6)
+rects2 = ax[1,0].barh(np.arange(len(PA_avg)), PA_avg, xerr=PA_std, capsize=3,
+                label='Area under protection', color='silver', height = 0.6)
+rects3 = ax[0,1].barh(np.arange(len(LG_avg)), LG_avg, xerr=LG_std, capsize=3,
+                label='Land grabbing', color='silver', height = 0.6)
+rects4 = ax[1,1].barh(np.arange(len(EX_avg)), EX_avg, xerr=EX_std, capsize=3,
+                label='Expropriations', color='silver', height = 0.6)
+rects5 = ax[0,2].barh(np.arange(len(LC_avg)), LC_avg, xerr=LC_std, capsize=3,
+                label='Lobbying and\ncampaigning', color='silver', height = 0.6)
+rects6 = ax[1,2].barh(np.arange(len(FS_avg)), FS_avg, xerr=FS_std, capsize=3,
+                label='Fining and\nshaming', color='silver', height = 0.6)
+
+# Creating a proxy artist for the the legend
+red_line = mlines.Line2D([], [], color='red', linestyle='--', label='Baseline')
+error_bar = mlines.Line2D([],[], color='black', linestyle='solid', label='Confidence\ninterval (95%)', marker='|', markersize='8')
+
+# LABELING THE PLOTS
+ax[0,0].set_xlabel('Parcels')
+ax[0,0].set_title('Forest extent', loc='left')
+ax[0,0].set_yticks(ind)
+ax[0,0].axvline(x=AD_UA, color='red', linestyle='--')
+ax[0,0].set_yticklabels(('Low Forest cover', 'High Forest cover', 'Laggard dominant', 'Pioneer dominant', 'Weak institutions', 'Strong institutions'))
+
+ax[1,0].set_xlabel('Parcels')
+ax[1,0].set_title('Area under protection', loc='left')
+ax[1,0].set_yticks(ind)
+ax[1,0].axvline(x=PA_UA, color='red', linestyle='--')
+
+ax[0,1].set_xlabel('Parcels')
+ax[0,1].set_title('Land grabbing', loc='left')
+ax[0,1].set_yticks(ind)
+ax[0,1].axvline(x=LG_UA, color='red', linestyle='--')
+
+ax[1,1].set_xlabel('Parcels')
+ax[1,1].set_title('Expropriations', loc='left')
+ax[1,1].set_yticks(ind)
+ax[1,1].axvline(x=EX_UA, color='red', linestyle='--')
+
+ax[0,2].set_xlabel('Transactions')
+ax[0,2].set_title('Lobbying & campaigning', loc='left')
+ax[0,2].set_yticks(ind)
+ax[0,2].axvline(x=LC_UA, color='red', linestyle='--')
+
+ax[1,2].set_xlabel('Transactions')
+ax[1,2].set_title('Fining & shaming', loc='left')
+ax[1,2].set_yticks(ind)
+ax[1,2].axvline(x=FS_UA, color='red', linestyle='--')
+
+plt.subplots_adjust(left=0.15,
+                    bottom=0.1, 
+                    right=0.975, 
+                    top=0.875, 
+                    wspace=0.15, 
+                    hspace=0.6)
+
+#setting fontsize for the entire figure
+plt.rc('font', size=13)
+
+#creating the legend
+ax[0,2].legend(bbox_to_anchor=(0.5375, 0.625), handles=[red_line, error_bar], fontsize=9, borderaxespad=0)
+
+#saving it
+# plt.savefig('filepath', facecolor='white', dpi=600)
