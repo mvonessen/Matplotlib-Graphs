@@ -1,0 +1,148 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.font_manager
+import matplotlib.patches as mpatches
+from matplotlib import rcParams
+from matplotlib import pyplot as plt
+from matplotlib.patches import Patch # to create custom legend
+from matplotlib.lines import Line2D  # to create custom legend
+from matplotlib.patches import Patch
+from matplotlib.patches import FancyBboxPatch
+import networkx as nx
+from adjustText import adjust_text
+### SETTING SOME FIGURE DESIGN PARAMETERS
+# Fonts & Labels
+rcParams['axes.labelsize'] = 14
+rcParams['xtick.labelsize'] = 12
+rcParams['ytick.labelsize'] = 12
+rcParams['legend.fontsize'] = 12
+
+plt.rc('font', family='serif', serif='Times')
+rcParams['font.family'] = 'serif'
+rcParams['font.serif'] = ['Times']
+
+# Size of the figure
+width = 20             #5.5 inches ios roughly the width of the useable space on a vertical A4 space
+height = width / 2     # dividing by 1.618 results in the golden ratio
+### Assigning data
+# x-axis values - land dispossessions
+# Order: UA, CC, SC, MS
+UA_Soy_LD, UA_Palm_LD, UA_Soy2_LD, UA_Palm2_LD = (502), (1276.73), (1285.06), (1087.03)
+CC_Soy_LD, CC_Palm_LD, CC_Soy2_LD, CC_Palm2_LD = (3412.53), (2998.41), (2377.21), (2758.25)
+SC_Soy_LD, SC_Palm_LD, SC_Soy2_LD, SC_Palm2_LD = (450.53), (1058.76), (745.58), (406.49)
+MS_Soy_LD, MS_Palm_LD, MS_Soy2_LD, MS_Palm2_LD = (192.667), (559.45), (516.55), (297.05)
+
+# y-axis values - deforestation
+UA_Soy_DF, UA_Palm_DF, UA_Soy2_DF, UA_Palm2_DF = (11804.2), (13143), (13310.29), (12941)
+CC_Soy_DF, CC_Palm_DF, CC_Soy2_DF, CC_Palm2_DF = (9027.933), (10752.933), (11711.54), (10082.76)
+SC_Soy_DF, SC_Palm_DF, SC_Soy2_DF, SC_Palm2_DF = (11546.73), (12837.67), (12784.21), (11413.65)
+MS_Soy_DF, MS_Palm_DF, MS_Soy2_DF, MS_Palm2_DF = (11387.2), (11654.533), (11628.44), (11126.6)
+
+# Average values
+Average_Soy_LD, Average_Palm_LD, Average_Soy2_LD, Average_Palm2_LD = (1139.483), (1473.3375), (1231.1), (1137.205)
+Average_Soy_DF, Average_Palm_DF, Average_Soy2_DF, Average_Palm2_DF = (10941.5167), (12097.033), (12358.62), (11391.025)
+# creating the plot
+fig, ax = plt.subplots(1,2, figsize=(13,5.5), sharey=True, tight_layout=False)
+plt.subplots_adjust(left=0.085, right=0.775, wspace=0.05, hspace=0.35, top=0.95)
+ax[0].set_title('$\\bf{Soy\ system\ in\ Brazil}$', fontsize=14)
+ax[1].set_title('$\\bf{Palm\ oil\ system\ in\ Indonesia}$', fontsize=14)
+
+# setting axes limits
+ax[0].set(xlim=(0,3600),
+          ylim=(8850,13500),
+          xlabel = 'Land dispossessions (in parcels)',
+          ylabel = 'Deforestation (in parcels)',
+          xticks=(0,1000,2000,3000),
+         )
+
+ax[1].set(xlim=(0,3600),
+          ylim=(8850,13500),
+          xlabel = 'Land dispossessions (in parcels)',
+          xticks=(0,1000,2000,3000),
+         )
+
+# plotting the experiments
+ax[0].scatter(UA_Soy_LD, UA_Soy_DF, marker='s', facecolor = 'black', s=65)
+ax[0].scatter(CC_Soy_LD, CC_Soy_DF, marker='D', facecolor = 'black', s=65)
+ax[0].scatter(SC_Soy_LD, SC_Soy_DF, marker='^', facecolor = 'black', edgecolor='black', s=65)
+ax[0].scatter(MS_Soy_LD, MS_Soy_DF, marker='o', facecolor = 'black', edgecolor='black', s=65)
+ax[0].scatter(UA_Soy2_LD, UA_Soy2_DF, marker='s', facecolor = 'silver', edgecolor='black', s=65)
+ax[0].scatter(CC_Soy2_LD, CC_Soy2_DF, marker='D', facecolor = 'silver', edgecolor='black', s=65)
+ax[0].scatter(SC_Soy2_LD, SC_Soy2_DF, marker='^', facecolor = 'silver', edgecolor='black', s=65)
+ax[0].scatter(MS_Soy2_LD, MS_Soy2_DF, marker='o', facecolor = 'silver', edgecolor='black', s=65)
+
+ax[1].scatter(UA_Palm_LD, UA_Palm_DF, marker='s', facecolor = 'black', s=65)
+ax[1].scatter(CC_Palm_LD, CC_Palm_DF, marker='D', facecolor = 'black', s=65)
+ax[1].scatter(SC_Palm_LD, SC_Palm_DF, marker='^', facecolor = 'black', edgecolor='black', s=65)
+ax[1].scatter(MS_Palm_LD, MS_Palm_DF, marker='o', facecolor = 'black', edgecolor='black', s=65)
+ax[1].scatter(UA_Palm2_LD, UA_Palm2_DF, marker='s', facecolor = 'silver', edgecolor='black', s=65)
+ax[1].scatter(CC_Palm2_LD, CC_Palm2_DF, marker='D', facecolor = 'silver', edgecolor='black', s=65)
+ax[1].scatter(SC_Palm2_LD, SC_Palm2_DF, marker='^', facecolor = 'silver', edgecolor='black', s=65)
+ax[1].scatter(MS_Palm2_LD, MS_Palm2_DF, marker='o', facecolor = 'silver', edgecolor='black', s=65)
+
+
+ax[0].scatter(Average_Soy_LD, Average_Soy_DF, marker='+', facecolor = 'black', edgecolor = None, s=125, linewidth=4)
+ax[0].scatter(Average_Soy2_LD, Average_Soy2_DF, marker='+', facecolor='grey', edgecolor=None, s=125, linewidth=4)
+ax[1].scatter(Average_Palm_LD, Average_Palm_DF, marker='+', facecolor = 'black', edgecolor = None, s=125, linewidth=4)
+ax[1].scatter(Average_Palm2_LD, Average_Palm2_DF, marker='+', facecolor = 'grey', edgecolor = None, s=125, linewidth=4)
+
+### Annotating the values with Number of transactions
+# Soy with original conditions
+ax[0].annotate('= ', xy=(UA_Soy_LD, UA_Soy_DF), xytext=(UA_Soy_LD-57, UA_Soy_DF+65), fontsize=12)
+ax[0].annotate('++', xy=(CC_Soy_LD, CC_Soy_DF), xytext=(CC_Soy_LD-115, CC_Soy_DF+65), fontsize=12)
+ax[0].annotate('- ', xy=(SC_Soy_LD, SC_Soy_DF), xytext=(SC_Soy_LD-39, SC_Soy_DF-195), fontsize=20)
+ax[0].annotate('= ', xy=(MS_Soy_LD, MS_Soy_DF), xytext=(MS_Soy_LD-57, MS_Soy_DF+65), fontsize=12)
+# with updated conditions
+ax[0].annotate('= ', xy=(UA_Soy2_LD, UA_Soy2_DF), xytext=(UA_Soy2_LD-58, UA_Soy2_DF+65), fontsize=12)
+ax[0].annotate('=', xy=(CC_Soy2_LD, CC_Soy2_DF), xytext=(CC_Soy2_LD-58, CC_Soy2_DF+85), fontsize=12)
+ax[0].annotate('--', xy=(SC_Soy2_LD, SC_Soy2_DF), xytext=(SC_Soy2_LD-58, SC_Soy2_DF+52), fontsize=15)
+ax[0].annotate('--', xy=(MS_Soy2_LD, MS_Soy2_DF), xytext=(MS_Soy2_LD+60, MS_Soy2_DF-70), fontsize=15)
+
+# Palmoil with original conditions
+ax[1].annotate('+ ', xy=(UA_Palm_LD, UA_Palm_DF), xytext=(UA_Palm_LD-56, UA_Palm_DF+70), fontsize=12)
+ax[1].annotate('++', xy=(CC_Palm_LD, CC_Palm_DF), xytext=(CC_Palm_LD-115, CC_Palm_DF+70), fontsize=12)
+ax[1].annotate('= ', xy=(SC_Palm_LD, SC_Palm_DF), xytext=(SC_Palm_LD-55, SC_Palm_DF-180), fontsize=12)
+ax[1].annotate('= ', xy=(MS_Palm_LD, MS_Palm_DF), xytext=(MS_Palm_LD-54, MS_Palm_DF+65), fontsize=12)
+# with updated conditions
+ax[1].annotate('= ', xy=(UA_Palm2_LD, UA_Palm2_DF), xytext=(UA_Palm2_LD-60, UA_Palm2_DF+65), fontsize=12)
+ax[1].annotate('++', xy=(CC_Palm2_LD, CC_Palm2_DF), xytext=(CC_Palm2_LD-115, CC_Palm2_DF+70), fontsize=12)
+ax[1].annotate('--', xy=(SC_Palm2_LD, SC_Palm2_DF), xytext=(SC_Palm2_LD-58, SC_Palm2_DF+45), fontsize=15)
+ax[1].annotate('--', xy=(MS_Palm2_LD, MS_Palm2_DF), xytext=(MS_Palm2_LD-63, MS_Palm2_DF+45), fontsize=15)
+
+
+### Drawing arrows between points
+style = "Simple, tail_width=3, head_width=10, head_length=12"
+kw = dict(arrowstyle=style, facecolor="grey", alpha=0.75)
+
+arrow = mpatches.FancyArrowPatch((Average_Soy_LD, Average_Soy_DF + 100), (Average_Soy2_LD, Average_Soy2_DF-100), **kw)
+arrow2 = mpatches.FancyArrowPatch((Average_Palm_LD - 30, Average_Palm_DF - 100), (Average_Palm2_LD + 50, Average_Palm2_DF+100), **kw)
+ax[0].annotate('Change in condition', xy=(Average_Soy_LD+100, Average_Soy_DF+300), color='dimgrey', fontsize=12)
+ax[1].annotate('Change in condition', xy=(Average_Palm2_LD+275, Average_Palm2_DF+300), color='dimgrey', fontsize=12)
+
+
+ax[0].add_patch(arrow)
+ax[1].add_patch(arrow2)
+
+### Creating the legend
+# manually setting the legend elements, matching the markers from the scatterplot
+legend_elements = [
+    Line2D([0], [0], marker='s', color='w', label='Weak regulations',markerfacecolor='none', markeredgecolor='black', markersize=11),
+    Line2D([0], [0], marker='D', color='w', label='Command-and-control', markerfacecolor='none', markeredgecolor='black', markersize=10),
+    Line2D([0], [0], marker='^', color='w', label='Supply chain sustainability', markerfacecolor='none', markeredgecolor='black', markersize=11),
+    Line2D([0], [0], marker='o', color='w', label='Multi-stakeholder coalition', markerfacecolor='none', markeredgecolor='black', markersize=11),
+    Line2D([0], [0], marker='P', color='w', label='Average (of interventions)', markerfacecolor='none', markeredgecolor='black', markersize=11),
+    Patch(facecolor='black', label= 'Initial conditions'),
+    Patch(facecolor='grey', label='New conditions')
+]
+
+leg = fig.legend(handles=legend_elements, title='$\\bf{Intervention}$',title_fontsize=12 , bbox_to_anchor=(0.895,0.56), loc='lower center', fontsize=12, edgecolor='none', facecolor='white')
+leg._legend_box.align = 'left'
+
+
+# Creating two 'fake' legend entries (as text boxes), for the conditions and transactions
+props = dict(boxstyle='round', facecolor='white', edgecolor='grey', alpha=1)
+legendtext = '$\\bf{Number\ of\ transactions}$\n++  Very high\n+     High\n=     Medium\n-       Low\n--      Very low'
+fig.text(0.79, 0.55, legendtext, fontsize=12, verticalalignment='top', horizontalalignment='left', linespacing=1.6)
+
+# save it
+# plt.savefig('filepath.png', facecolor='white', dpi=600)
